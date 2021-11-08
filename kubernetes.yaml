@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: restapi-crud-user
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: restapi-crud-user
+  template:
+    metadata:
+      labels:
+        app: restapi-crud-user
+    spec:
+      containers:
+      - name: restapi-crud-user
+        image: 1147050123/restapi-crud-user:latest
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: restapi-crud-user
+  namespace: default
+spec:
+  type: NodePort
+  selector:
+    app: restapi-crud-user
+  ports:
+  - port: 3000
+    targetPort: 3000
+    nodePort: 30001

@@ -1,0 +1,36 @@
+version: '3.8'
+services:
+  mongo:
+    container_name: restapi-crud-user-mongo
+    image: mongo
+    restart: always
+    ports: 
+      - 27017:27017
+    networks: 
+      - node_network
+    # volumes:
+    #   - ./volume:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: toor
+  backend:
+    links: 
+      - mongo
+    container_name: restapi-crud-user
+    image: node:14
+    working_dir: /usr/src/restapi-crud-user
+    ports: 
+      - 3001:3001
+    environment:
+      - PORT=3001
+      - NAME=restrestapi-crud-user
+      - ACCESS_TOKEN_SECRET=is4s3cr3t
+      - REFRESH_TOKEN_SECRET=s3cr3t
+      - MONGO_HOST=mongodb://root:toor@mongo:27017/admin
+    networks: 
+      - node_network
+    volumes:
+      - .:/usr/src/restapi-crud-user
+    command: sh -c "npm install && npm run dev"
+networks:
+  node_network:
